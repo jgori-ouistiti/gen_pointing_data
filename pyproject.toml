@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "gen-pointing-data"
+version = "0.1.0"
+description = "Utilities to generate realistic movement time distributions for various user strategies"
+authors = ["jgori <juliengori@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^2.1.1"
+scipy = "^1.14.1"
+polars = "^1.7.1"
+matplotlib = "^3.9.2"
+seaborn = "^0.13.2"
+rpy2 = "^3.5.16"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
