@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "gen-pointing-data"
+name = "gen-joint-mtide"
 version = "0.1.0"
 description = "Utilities to generate realistic movement time distributions for various user strategies"
 authors = ["jgori <juliengori@gmail.com>"]

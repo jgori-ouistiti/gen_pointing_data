@@ -1,5 +1,5 @@
 from scipy.stats import norm, multivariate_normal
-from simulate import gen_t_copula, gen_emg, gen_emg_control
+from .simulate import gen_t_copula, gen_emg, gen_emg_control
 
 
 import polars

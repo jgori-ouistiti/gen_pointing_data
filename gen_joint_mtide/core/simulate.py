@@ -8,11 +8,13 @@ import rpy2.robjects as robjects
 from rpy2.robjects.vectors import FloatVector
 from rpy2.rlike.container import TaggedList
 
-from emg_arbitrary_variance import compute_emg_regression_linear_expo_mean
+from .emg_arbitrary_variance import compute_emg_regression_linear_expo_mean
 
-robjects.r["source"]("gen_t_copula.R")
+_path = "/".join(__file__.split("/")[:-1])
+
+robjects.r["source"](f"{_path}/gen_t_copula.R")
 gen_copula_fun = robjects.globalenv["gen_block_t"]
-robjects.r["source"]("fit_tcopula.R")
+robjects.r["source"](f"{_path}/fit_tcopula.R")
 fit_copula_fun = robjects.globalenv["fit_t_copula"]
 
 
