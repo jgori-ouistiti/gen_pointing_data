@@ -30,6 +30,12 @@ def fit_t_copula(ide, mt):
 
 
 def correct_beta_lambda(ide, mt, beta, lambda_emg):
+    # force arrays to exploit broadcasting
+    ide = numpy.asarray(ide)
+    mt = numpy.asarray(mt)
+    beta = numpy.asarray(beta)
+    lambda_emg = numpy.asarray(lambda_emg)
+
     lambda_corrected = (
         numpy.array([lambda_emg[0] for i in ide]),
         numpy.maximum(
