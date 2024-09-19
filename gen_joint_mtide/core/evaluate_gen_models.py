@@ -1,11 +1,11 @@
-from simulate import gen_t_copula, gen_emg, gen_emg_control
+from .simulate import gen_t_copula, gen_emg, gen_emg_control
 import polars
 import matplotlib.pyplot as plt
 import seaborn
 import numpy
 from scipy.stats import gamma, pearsonr, spearmanr, kendalltau, multivariate_normal
 import statsmodels.api as sm
-from emg_arbitrary_variance import compute_emg_regression_linear_expo_mean
+from .emg_arbitrary_variance import compute_emg_regression_linear_expo_mean
 
 plt.style.use("fivethirtyeight")
 
@@ -43,7 +43,11 @@ def compute_associations(df):
 
 
 def compute_ols_means(df):
-    df_mean = df["IDe", "MT"].groupby("IDe").mean()
+    if isinstance(df, polars.DataFrame):
+        group_att = "group_by"
+    else:
+        group_att = "groupby"
+    df_mean = getattr(df["IDe", "MT"], group_att).__call__("IDe").mean()
     X = sm.add_constant(df_mean["IDe"])
     model = sm.OLS(numpy.asarray(df_mean["MT"]), X)
     results = model.fit()
