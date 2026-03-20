@@ -7,22 +7,36 @@ import seaborn
 import rpy2.robjects as robjects
 from rpy2.robjects.vectors import FloatVector
 from rpy2.rlike.container import TaggedList
+from rpy2.robjects.vectors import ListVector
 
 from .emg_arbitrary_variance import compute_emg_regression_linear_expo_mean
 
-_path = "/".join(__file__.split("/")[:-1])
+import os
 
-robjects.r["source"](f"{_path}/gen_t_copula.R")
+r_scripts_dir = os.path.join(os.path.dirname(__file__), "..", "r_scripts")
+r_script_path = os.path.join(r_scripts_dir, "gen_t_copula.R")
+robjects.r["source"](r_script_path)
 gen_copula_fun = robjects.globalenv["gen_block_t"]
-robjects.r["source"](f"{_path}/fit_tcopula.R")
+
+r_script_path = os.path.join(r_scripts_dir, "fit_tcopula.R")
+robjects.r["source"](r_script_path)
 fit_copula_fun = robjects.globalenv["fit_t_copula"]
 
 
 def python_params_to_named_list_R(obj):
     params = obj["params"]
-    params_list = TaggedList(list(params.values()), tags=list(params.keys()))
-    obj_list = TaggedList([obj["distribution"], params_list], tags=list(obj.keys()))
+    params_list = ListVector({k: v for k, v in params.items()})
+
+    obj_list = ListVector({"distribution": obj["distribution"], "params": params_list})
+
     return obj_list
+
+
+# def python_params_to_named_list_R(obj):
+#     params = obj["params"]
+#     params_list = TaggedList(list(params.values()), tags=list(params.keys()))
+#     obj_list = TaggedList([obj["distribution"], params_list], tags=list(obj.keys()))
+#     return obj_list
 
 
 def fit_t_copula(ide, mt):
@@ -30,12 +44,6 @@ def fit_t_copula(ide, mt):
 
 
 def correct_beta_lambda(ide, mt, beta, lambda_emg):
-    # force arrays to exploit broadcasting
-    ide = numpy.asarray(ide)
-    mt = numpy.asarray(mt)
-    beta = numpy.asarray(beta)
-    lambda_emg = numpy.asarray(lambda_emg)
-
     lambda_corrected = (
         numpy.array([lambda_emg[0] for i in ide]),
         numpy.maximum(
