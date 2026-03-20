@@ -211,3 +211,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 
+
+## uv
+uv.lock

@@ -1,4 +1,12 @@
 # gen_joint_mtide/__init__.py
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version("gen-joint-mtide")
+except PackageNotFoundError:
+    # package is not installed (e.g., running from source)
+    __version__ = "0.0.0"
+
 
 # core module
 from .core.emg_arbitrary_variance import *
